@@ -5,8 +5,8 @@ class PostControllers {
   static async createPost(req, res) {
     const body = req.body;
     const schema = Joi.object().keys({
-      title: Joi.string().required().min(6).max(30),
-      article: Joi.required(),
+      title: Joi.string().required().min(6).max(100),
+      article: Joi.any(),
       author: Joi.string().required(),
       img_url: Joi.string().uri(),
       tags: Joi.string(),

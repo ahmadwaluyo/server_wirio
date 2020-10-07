@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   td_post.init(
     {
       title: DataTypes.STRING,
-      article: DataTypes.STRING,
+      article: DataTypes.TEXT,
       author: DataTypes.STRING,
       image_url: DataTypes.STRING,
       tags: DataTypes.STRING,
