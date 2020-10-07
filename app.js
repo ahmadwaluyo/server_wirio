@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const errorHandler = require('./app/middlewares/error');
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
@@ -13,5 +14,7 @@ const postRoutes = require('./app/routes/posts_routes');
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/posts', postRoutes);
+
+app.use(errorHandler);
 
 module.exports = app;

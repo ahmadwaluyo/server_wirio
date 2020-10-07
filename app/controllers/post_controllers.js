@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const models = require('../models/index');
+const { errorMessage, successMessage, status } = require('../helpers/status');
 
 class PostControllers {
   static async createPost(req, res) {
@@ -25,20 +26,25 @@ class PostControllers {
     try {
       await schema.validateAsync(body);
       const data = await models.td_post.create(payload);
-      res.status(201).json(data);
+      successMessage.status = 201;
+      successMessage.content = data;
+      res.status(status.created).json(successMessage);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ code: 500, error: error.message });
+      console.error(error.message);
+      errorMessage.message = error.message;
+      res.status(status.error).json(errorMessage);
     }
   }
 
   static async getPosts(_, res) {
     try {
       const data = await models.td_post.findAll({});
-      res.status(200).json(data);
+      successMessage.content = data;
+      res.status(status.success).json(successMessage);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ code: 500, error: error.message });
+      console.error(error.message);
+      errorMessage.message = error.message;
+      res.status(status.error).json(errorMessage);
     }
   }
 }
