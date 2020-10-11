@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const models = require('../models/index');
 const { errorMessage, successMessage, status } = require('../helpers/status');
+const ErrorResponse = require('../helpers/errorResponse');
 
 class PostControllers {
   static async createPost(req, res) {
@@ -24,7 +25,8 @@ class PostControllers {
     };
 
     try {
-      await schema.validateAsync(body);
+      const validation = await schema.validateAsync(body);
+      console.log(validation);
       const data = await models.td_post.create(payload);
       successMessage.status = 201;
       successMessage.content = data;
@@ -40,6 +42,60 @@ class PostControllers {
     try {
       const data = await models.td_post.findAll({});
       successMessage.content = data;
+      res.status(status.success).json(successMessage);
+    } catch (error) {
+      console.error(error.message);
+      errorMessage.message = error.message;
+      res.status(status.error).json(errorMessage);
+    }
+  }
+
+  static async getPostById (req, res, next) {
+    const {id} = req.params;
+
+    try {
+      const data = await models.td_post.findAll({
+        where: { id }
+      });
+      
+      if (data.length === 0) return next(new ErrorResponse(`Not Found`, status.notFound));
+      
+      successMessage.content = data[0];
+      res.status(status.success).json(successMessage);
+    } catch (error) {
+      console.error(error.message);
+      errorMessage.message = error.message;
+      res.status(status.error).json(errorMessage);
+    }
+  }
+
+  static async updatePost (req, res) {
+    const {id} = req.params;
+    const payload = req.body;
+
+    try {
+      const data = models.td_post.update(payload, {
+        where: { id },
+        returning: true,
+        plain: true
+      });
+      successMessage.content = data;
+      res.status(status.success).json(successMessage);
+    } catch (error) {
+      console.error(error.message);
+      errorMessage.message = error.message;
+      res.status(status.error).json(errorMessage);
+    }
+  }
+
+  static async deletePost (req, res) {
+    const {id} = req.params;
+    
+    try {
+      await models.td_post.destroy({
+        where: {id}
+      });
+      successMessage.content = {};
       res.status(status.success).json(successMessage);
     } catch (error) {
       console.error(error.message);
