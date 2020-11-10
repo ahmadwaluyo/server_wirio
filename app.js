@@ -7,6 +7,10 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.get('/', (_, res) => {
+  res.status(200).json({ message: "Hello World" });
+});
+
 const studentRoutes = require('./app/routes/student_routes');
 const userRoutes = require('./app/routes/users_routes');
 const authRoutes = require('./app/routes/auth_routes');
