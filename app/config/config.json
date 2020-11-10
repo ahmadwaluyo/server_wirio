@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "12345",
-    "database": "ppm_wiriosoedarmo",
+    "username": "wiriosoe_admin",
+    "password": "P@ssW0rd123!",
+    "database": "wiriosoe_wiriodb",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
