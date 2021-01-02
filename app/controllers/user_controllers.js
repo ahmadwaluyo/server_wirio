@@ -15,6 +15,19 @@ class UserController {
       res.status(status.error).json(errorMessage);
     }
   }
+  static async deleteUserById(req, res) {
+    const { id } = req.params;
+    try {
+      const deleted = await models.td_user.destroy({
+        where: {
+          id : id
+        }
+      })
+      console.log(deleted)
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 }
 
 module.exports = UserController;

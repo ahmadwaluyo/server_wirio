@@ -2,11 +2,36 @@ const StudentSchema = require('../schemas/student_schemas');
 const models = require('../models/index');
 const { errorMessage, successMessage, status } = require('../helpers/status');
 const ErrorResponse = require('../helpers/errorResponse');
+const multer = require('multer');
+const DIR = 'uploads/';
+const { fromString } = require('uuidv4');
+const XLSX = require('xlsx');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, DIR);
+  },
+  filename: (req, file, cb) => {
+      const fileName = file.originalname.toLowerCase().split(' ').join('-');
+      cb(null, fromString('the native web') + '-' + new Date().getTime() + fileName);
+  }
+})
+
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+      cb(null, true);
+  }
+});
 
 class StudentControllers {
   static async addStudent(req, res, next) {
     const body = req.body;
 
+    console.log(body, "<<< ini req");
+    upload.single(body.rekap_nilai, (req, res, next) => {
+      console.log(req.file, "<<< coba ini")
+    }) 
     let payload = {
       nama: body.nama,
       alamat: body.alamat,
